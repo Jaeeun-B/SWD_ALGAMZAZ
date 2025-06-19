@@ -7,15 +7,18 @@ public class CLIApplication {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        // 로그인 수행
+        // 🔐 로그인
         Login login = new Login();
-        login.selectMethod(sc); // 로그인 방식 선택 및 로그인 실행
+        login.selectMethod(sc);
 
-        // 로그인 성공 후 나머지 기능 진입
+        // 📦 기능별 객체 초기화
         NotificationPage notificationPage = new NotificationPage();
-        BusRoutePage busRoutePage = new BusRoutePage();
-        FavoritesManager favoritesManager = new FavoritesManager();
+        TimetableViewer timetableViewer = new TimetableViewer();
+        CongestionService congestionService = new CongestionService();
+        FavoritesManager favoritesManager = new FavoritesManager(congestionService);
+        BusRoutePage busRoutePage = new BusRoutePage(timetableViewer, congestionService, favoritesManager);
 
+        // 🖥️ 메인 루프
         while (true) {
             printMainScreen();
 
