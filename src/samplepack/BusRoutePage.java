@@ -8,6 +8,16 @@ public class BusRoutePage {
     private String Route;
     private String Stop;
 
+    private final TimetableViewer timetableViewer;
+    private final CongestionService congestionService;
+    private final FavoritesManager favoritesManager;
+
+    public BusRoutePage(TimetableViewer timetableViewer, CongestionService congestionService, FavoritesManager favoritesManager) {
+        this.timetableViewer = timetableViewer;
+        this.congestionService = congestionService;
+        this.favoritesManager = favoritesManager;
+    }
+
     private static final Map<Integer, String> routeMap = Map.of(
             1, "연구협력관행",
             2, "한우리집행",
@@ -105,9 +115,6 @@ public class BusRoutePage {
     }
 
     public void handleStopMenu(Scanner sc) {
-        TimetableViewer timetableViewer = new TimetableViewer();
-        CongestionService congestionService = new CongestionService();
-
         System.out.println("==============");
         System.out.println("정류장: " + Stop);
         System.out.println("[시간표] " + timetableViewer.showArrivalInfo(Route, Stop));
@@ -128,7 +135,7 @@ public class BusRoutePage {
                 case 1 -> timetableViewer.showTimetable(Route, Stop);
                 case 2 -> congestionService.predict(Route, Stop);
                 case 3 -> congestionService.reportWithInput(sc);
-                case 4 -> new FavoritesManager().setFavoriteTimetable(Route, Stop);
+                case 4 -> favoritesManager.addFavorite(sc);  // ✅ 즐겨찾기 추가 (setFavoriteTimetable 제거)
                 case 5 -> { return; }
                 default -> System.out.println("⚠ 올바른 번호를 선택해주세요.");
             }
